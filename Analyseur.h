@@ -35,14 +35,12 @@ public:
     // Contrat :
     //
 
-
 //------------------------------------------------- Surcharge d'opérateurs
     Analyseur & operator = ( const Analyseur & unXxx );
     // Mode d'emploi :
     //
     // Contrat :
     //
-
 
 //-------------------------------------------- Constructeurs - destructeur
     Analyseur ( const Analyseur & unXxx );
@@ -51,7 +49,7 @@ public:
     // Contrat :
     //
 
-    Analyseur (const Interpreteur* destination);
+    Analyseur (Interpreteur* destination);
     // Mode d'emploi :
     //
     // Contrat :
@@ -63,13 +61,15 @@ public:
     // Contrat :
     //
 
+    void analyser(const string& ligne);
+
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    const Interpreteur* destination;
+    Interpreteur* destination;
 
 };
 
