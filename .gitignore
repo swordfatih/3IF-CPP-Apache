@@ -1,2 +1,3 @@
-.o
+*.o
 xmake.lua
+apache
