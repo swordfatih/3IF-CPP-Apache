@@ -34,6 +34,7 @@ Statistiques & Statistiques::operator = ( const Statistiques & unStatistiques )
 // Algorithme :
 //
 {
+    return *this;
 } //----- Fin de operator =
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -46,7 +47,7 @@ Statistiques::Statistiques ( const Statistiques & unStatistiques )
 #endif
 } //----- Fin de Xxx (constructeur de copie)
 
-Statistiques::Statistiques (bool extension, bool graphe, bool temps) : extension(extension), graphe(graphe), temps(temps)
+Statistiques::Statistiques (bool extension, int heure) : extension(extension), heure(heure)
 // Algorithme :
 //
 {
@@ -67,17 +68,84 @@ Statistiques::~Statistiques ( )
 
 void Statistiques::traiter(const Log& requete)
 {
-    std::cout << requete.referer << " " << requete.url << std::endl;
+    if(documents.count(requete.url) == 0)
+        documents[requete.url] = 1;
+    else
+        documents[requete.url]++;
+
+    std::pair<std::string, std::string> paire(requete.referer, requete.url);
+
+    if(noeuds.count(paire) == 0)
+        noeuds[paire] = 1;
+    else
+        noeuds[paire]++;
+
+    pages.insert(requete.referer);
+    pages.insert(requete.url);
 }
 
 void Statistiques::generate_scoreboard()
 {
+    std::vector<std::pair<std::string, int>> valeurs;
 
+    std::unordered_map<std::string, int>::iterator it;
+    for(it = documents.begin(); it != documents.end(); ++it)
+    {
+        valeurs.push_back(std::make_pair(it->first, it->second));
+    }
+
+    std::sort(valeurs.begin(), valeurs.end(), [&](const std::pair<std::string, int>& f, std::pair<std::string, int>& s) -> bool {
+        return f.second > s.second;
+    });
+
+    for(unsigned int i = 0; i < valeurs.size(); ++i)
+    {
+        std::cout << valeurs[i].first << " " << valeurs[i].second << std::endl;
+    }
 }
 
-void Statistiques::generate_dot()
+std::string format(std::string input)
 {
-    
+    if(input.rfind('/') != std::string::npos)
+        input = input.substr(input.rfind('/'));
+
+    std::string formatted;
+    for(int i = 0; i < input.size(); ++i)
+    {
+        char c = input[i];
+        if(c != '.' && c != '/' && c != '-' && c != ':')
+        {
+            formatted += c;
+        }
+    }
+
+    return formatted;
+}
+
+void Statistiques::generate_dot(const std::string& chemin_sortie)
+{
+    std::cout << "Dot-file " << chemin_sortie << " generated" << std::endl;
+
+    std::ofstream out(chemin_sortie);
+
+    if(out)
+    {
+        out << "digraph {" << std::endl;
+
+        std::set<std::string>::iterator it_pages;
+        for(it_pages = pages.begin(); it_pages != pages.end(); ++it_pages)
+        {
+            out << format(*it_pages) << " [label=\"" << format(*it_pages) << "\"];" << std::endl;
+        }
+
+        std::map<std::pair<std::string, std::string>, int>::iterator it_noeuds;
+        for(it_noeuds = noeuds.begin(); it_noeuds != noeuds.end(); ++it_noeuds)
+        {
+            out << format(it_noeuds->first.first) << " -> " << format(it_noeuds->first.second) << " [label=\"" << it_noeuds->second << "\"];" << std::endl;
+        }
+
+        out << "}" << std::endl;
+    }
 }
 
 //------------------------------------------------------------------ PRIVE

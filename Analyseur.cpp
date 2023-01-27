@@ -58,7 +58,7 @@ Log Analyseur::analyser(const std::string& ligne)
     
     std::string format;
 
-    for(int i = 0; i < ligne.size(); ++i)
+    for(unsigned int i = 0; i < ligne.size(); ++i)
     {
         char c = ligne.at(i);
         if(c != '[' && c != ']' && c != '"')

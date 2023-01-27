@@ -1,4 +1,4 @@
-OBJECTS := main.o 
+OBJECTS := main.o Analyseur.o Interpreteur.o Statistiques.o
 OUTPUT := apache
 CXX := g++
 CPPFLAGS := -ansi -pedantic -Wall -std=c++11

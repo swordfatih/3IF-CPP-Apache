@@ -14,6 +14,11 @@
 #include "Interpreteur.h"
 
 #include <unordered_map>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <vector>
+#include <fstream>
 
 //------------------------------------------------------------- Constantes
 
@@ -52,7 +57,7 @@ public:
     // Contrat :
     //
 
-    Statistiques (bool extension = false, bool graphe = false, bool temps = false);
+    Statistiques (bool extension = false, int heure = -1);
     // Mode d'emploi :
     //
     // Contrat :
@@ -67,7 +72,7 @@ public:
     void traiter(const Log& requete);
 
     void generate_scoreboard();
-    void generate_dot();
+    void generate_dot(const std::string& chemin_sortie);
 
 //------------------------------------------------------------------ PRIVE
 
@@ -75,12 +80,12 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    // std::unordered_map<std::string, int> documents;
-    // std::unordered_map<std::pair<std::string, std::string>, int> noeuds;
+    std::unordered_map<std::string, int> documents;
+    std::map<std::pair<std::string, std::string>, int> noeuds;
+    std::set<std::string> pages;
 
     bool extension;
-    bool graphe;
-    bool temps;
+    int heure;
 
 };
 
