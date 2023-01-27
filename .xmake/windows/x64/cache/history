@@ -1,0 +1,17 @@
+{
+    cmdlines = {
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]],
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\config.lua]],
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\update_intellisense.lua .vscode]],
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]],
+        "xmake f --toolchain=mingw",
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\config.lua]],
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\update_intellisense.lua .vscode]],
+        "xmake f --toolchain=mingw",
+        "xmake build",
+        [[xmake lua "C:\\\\Program Files\\\\xmake\\\\actions\\\\build\\\\cleaner.lua"]],
+        "xmake run",
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]],
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]]
+    }
+}

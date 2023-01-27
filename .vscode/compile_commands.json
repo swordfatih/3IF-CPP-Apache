@@ -1,0 +1,6 @@
+[
+{
+  "directory": "c:\\Users\\fatih\\Documents\\Github\\3IF-CPP-Apache",
+  "arguments": ["C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe", "-c", "-std=c++11", "-fexceptions", "-o", "build\\.objs\\tp\\windows\\x64\\release\\main.cpp.obj", "main.cpp"],
+  "file": "main.cpp"
+}]
