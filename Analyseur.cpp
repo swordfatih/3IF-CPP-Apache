@@ -11,8 +11,8 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
+#include <sstream>
 
 //------------------------------------------------------ Include personnel
 #include "Analyseur.h"
@@ -63,10 +63,32 @@ Analyseur::~Analyseur ( )
 #endif
 } //----- Fin de ~Analyseur
 
-void Analyseur::analyser(const string& ligne)
+void Analyseur::analyser(const std::string& ligne)
 {
     Log log;
 
+    // ligne.ligne.find(':');
+
+    std::stringstream stream(ligne);
+
+    std::string token;
+
+    std::getline(stream, log.ip, ' ');
+    std::getline(stream, log.log_name, ' ');
+    std::getline(stream, log.auth_name, ' ');
+    std::getline(stream, log.date, ' ');
+
+    std::getline(stream, token, ' ');
+    log.heure = std::stoi(token);
+
+    std::getline(stream, log.action, ' ');
+    std::getline(stream, log.status, ' ');
+
+    std::getline(stream, token, ' ');
+    log.size = std::stoll(token);
+
+    std::getline(stream, log.referer, ' ');
+    std::getline(stream, log.client, ' ');
 
     destination->traiter(log);
 }

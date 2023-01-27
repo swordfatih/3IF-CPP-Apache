@@ -12,6 +12,7 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include "Interpreteur.h"
+#include <string>
 
 //------------------------------------------------------------- Constantes
 
@@ -61,7 +62,7 @@ public:
     // Contrat :
     //
 
-    void analyser(const string& ligne);
+    void analyser(const std::string& ligne);
 
 //------------------------------------------------------------------ PRIVE
 
