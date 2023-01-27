@@ -12,6 +12,9 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include "Interpreteur.h"
+
+#include <unordered_map>
+
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -50,7 +53,7 @@ public:
     // Contrat :
     //
 
-    Statistiques ( );
+    Statistiques (bool extension = false, bool graphe = false, bool temps = false);
     // Mode d'emploi :
     //
     // Contrat :
@@ -62,12 +65,20 @@ public:
     // Contrat :
     //
 
+    void traiter(const Log& requete);
+
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+    std::unordered_map<std::string, int> documents;
+    std::unordered_map<std::pair<std::string, std::string>, int> graphe;
+
+    bool extension;
+    bool graphe;
+    bool temps;
 
 };
 

@@ -15,7 +15,7 @@ using namespace std;
 #include <iostream>
 
 //------------------------------------------------------ Include personnel
-#include "Stastiques.h"
+#include "Statistiques.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -48,7 +48,7 @@ Statistiques::Statistiques ( const Statistiques & unStatistiques )
 } //----- Fin de Xxx (constructeur de copie)
 
 
-Statistiques::Statistiques ( )
+Statistiques::Statistiques (bool extension, bool graphe, bool temps) : extension(extension), graphe(graphe), temps(temps)
 // Algorithme :
 //
 {
@@ -67,6 +67,10 @@ Statistiques::~Statistiques ( )
 #endif
 } //----- Fin de ~Xxx
 
+void Statistiques::traiter(const Log& requete)
+{
+
+}
 
 //------------------------------------------------------------------ PRIVE
 
