@@ -12,6 +12,7 @@
         [[xmake lua "C:\\\\Program Files\\\\xmake\\\\actions\\\\build\\\\cleaner.lua"]],
         "xmake run",
         [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]],
+        [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]],
         [[xmake l c:\Users\fatih\.vscode\extensions\tboox.xmake-vscode-1.9.3\assets\explorer.lua]]
     }
 }
