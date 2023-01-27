@@ -28,14 +28,12 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
-
 //------------------------------------------------- Surcharge d'opérateurs
 Analyseur & Analyseur::operator = ( const Analyseur & unAnalyseur )
 // Algorithme :
 //
 {
 } //----- Fin de operator =
-
 
 //-------------------------------------------- Constructeurs - destructeur
 Analyseur::Analyseur ( const Analyseur & unAnalyseur )
@@ -47,8 +45,7 @@ Analyseur::Analyseur ( const Analyseur & unAnalyseur )
 #endif
 } //----- Fin de Analyseur (constructeur de copie)
 
-
-Analyseur::Analyseur ( const Interpreteur* destination ) : destination(destination)
+Analyseur::Analyseur ( Interpreteur* destination ) : destination(destination)
 // Algorithme :
 //
 {
@@ -56,7 +53,6 @@ Analyseur::Analyseur ( const Interpreteur* destination ) : destination(destinati
     cout << "Appel au constructeur de <Analyseur>" << endl;
 #endif
 } //----- Fin de Analyseur
-
 
 Analyseur::~Analyseur ( )
 // Algorithme :
@@ -67,6 +63,13 @@ Analyseur::~Analyseur ( )
 #endif
 } //----- Fin de ~Analyseur
 
+void Analyseur::analyser(const string& ligne)
+{
+    Log log;
+
+
+    destination->traiter(log);
+}
 
 //------------------------------------------------------------------ PRIVE
 
