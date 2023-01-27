@@ -1,12 +1,12 @@
 /*************************************************************************
-                           Xxx  -  description
+                           Statistiques  -  description
                              -------------------
     début                : $DATE$
     copyright            : (C) $YEAR$ par $AUTHOR$
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <Xxx> (fichier Xxx.cpp) ------------
+//---------- Réalisation de la classe <Statistiques> (fichier Statistiques.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -36,7 +36,6 @@ Statistiques & Statistiques::operator = ( const Statistiques & unStatistiques )
 {
 } //----- Fin de operator =
 
-
 //-------------------------------------------- Constructeurs - destructeur
 Statistiques::Statistiques ( const Statistiques & unStatistiques )
 // Algorithme :
@@ -46,7 +45,6 @@ Statistiques::Statistiques ( const Statistiques & unStatistiques )
     cout << "Appel au constructeur de copie de <Xxx>" << endl;
 #endif
 } //----- Fin de Xxx (constructeur de copie)
-
 
 Statistiques::Statistiques (bool extension, bool graphe, bool temps) : extension(extension), graphe(graphe), temps(temps)
 // Algorithme :
@@ -69,7 +67,7 @@ Statistiques::~Statistiques ( )
 
 void Statistiques::traiter(const Log& requete)
 {
-
+    std::cout << requete.referer << " " << requete.url << std::endl;
 }
 
 void Statistiques::generate_scoreboard()

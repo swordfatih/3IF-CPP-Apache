@@ -1,9 +1,9 @@
 {
-    recheck = false,
     mtimes = {
         ["xmake.lua"] = 1674827228
     },
     options = {
         toolchain = "mingw"
-    }
+    },
+    recheck = false
 }

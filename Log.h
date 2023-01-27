@@ -27,7 +27,10 @@ struct Log
     std::string auth_name;
     std::string date;
     unsigned int heure;
+    std::string shift;
     std::string action;
+    std::string url;
+    std::string version;
     std::string status;
     size_t size;
     std::string referer;

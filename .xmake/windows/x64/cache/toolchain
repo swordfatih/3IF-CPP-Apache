@@ -1,13 +1,13 @@
 {
-    tool_target_tp_windows_x64_cxx = {
-        toolname = "gxx",
-        program = [[C:\msys64\mingw64\bin\x86_64-w64-mingw32-g++]],
+    tool_target_tp_windows_x64_ld = {
         toolchain_info = {
-            arch = "x64",
-            name = "mingw",
             plat = "windows",
-            cachekey = "mingw_arch_x64_plat_windows"
-        }
+            name = "mingw",
+            cachekey = "mingw_arch_x64_plat_windows",
+            arch = "x64"
+        },
+        program = [[C:\msys64\mingw64\bin\x86_64-w64-mingw32-g++]],
+        toolname = "gxx"
     },
     mingw_arch_x64_plat_windows = {
         plat = "windows",
@@ -17,14 +17,14 @@
         bindir = [[C:\msys64\mingw64\bin]],
         cross = "x86_64-w64-mingw32-"
     },
-    tool_target_tp_windows_x64_ld = {
-        toolname = "gxx",
-        program = [[C:\msys64\mingw64\bin\x86_64-w64-mingw32-g++]],
+    tool_target_tp_windows_x64_cxx = {
         toolchain_info = {
-            arch = "x64",
-            name = "mingw",
             plat = "windows",
-            cachekey = "mingw_arch_x64_plat_windows"
-        }
+            name = "mingw",
+            cachekey = "mingw_arch_x64_plat_windows",
+            arch = "x64"
+        },
+        program = [[C:\msys64\mingw64\bin\x86_64-w64-mingw32-g++]],
+        toolname = "gxx"
     }
 }

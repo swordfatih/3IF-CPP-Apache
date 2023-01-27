@@ -35,28 +35,9 @@ public:
     // Contrat :
     //
 
-
 //------------------------------------------------- Surcharge d'opérateurs
-    Interpreteur & operator = ( const Interpreteur & unInterpreteur );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 
 //-------------------------------------------- Constructeurs - destructeur
-    Interpreteur ( const Interpreteur & unInterpreteur ) = default;
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
-    Interpreteur ( ) = default;
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
     virtual ~Interpreteur () = 0;
     // Mode d'emploi : Destructeur abstraite
     //

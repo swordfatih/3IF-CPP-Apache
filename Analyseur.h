@@ -13,6 +13,8 @@
 //--------------------------------------------------- Interfaces utilisées
 #include "Interpreteur.h"
 #include <string>
+#include <fstream>
+#include <vector>
 
 //------------------------------------------------------------- Constantes
 
@@ -24,7 +26,7 @@
 //
 //------------------------------------------------------------------------
 
-class Analyseur
+class Analyseur : public std::ifstream
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -37,32 +39,18 @@ public:
     //
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Analyseur & operator = ( const Analyseur & unXxx );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    Analyseur& operator>>(Interpreteur* destination);
 
 //-------------------------------------------- Constructeurs - destructeur
     Analyseur ( const Analyseur & unXxx );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
-    Analyseur (Interpreteur* destination);
+    Analyseur (const std::string& path);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~Analyseur ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    void analyser(const std::string& ligne);
+    Log analyser(const std::string& ligne);
 
 //------------------------------------------------------------------ PRIVE
 
@@ -70,8 +58,6 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    Interpreteur* destination;
-
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyseur>

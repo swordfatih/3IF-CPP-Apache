@@ -1,12 +1,12 @@
 /*************************************************************************
-                           Xxx  -  description
+                           Statistiques  -  description
                              -------------------
     début                : $DATE$
     copyright            : (C) $YEAR$ par $AUTHOR$
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Interface de la classe <Xxx> (fichier Xxx.h) ----------------
+//---------- Interface de la classe <Statistiques> (fichier Statistiques.h) ----------------
 #if ! defined ( STATISTIQUES_H )
 #define STATISTIQUES_H
 
@@ -20,7 +20,7 @@
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Xxx>
+// Rôle de la classe <Statistiques>
 //
 //
 //------------------------------------------------------------------------
@@ -44,7 +44,6 @@ public:
     //
     // Contrat :
     //
-
 
 //-------------------------------------------- Constructeurs - destructeur
     Statistiques ( const Statistiques & unStatistiques);
@@ -76,8 +75,8 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    std::unordered_map<std::string, int> documents;
-    std::unordered_map<std::pair<std::string, std::string>, int> graphe;
+    // std::unordered_map<std::string, int> documents;
+    // std::unordered_map<std::pair<std::string, std::string>, int> noeuds;
 
     bool extension;
     bool graphe;
@@ -85,7 +84,7 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <Xxx>
+//-------------------------------- Autres définitions dépendantes de <Statistiques>
 
-#endif // XXX_H
+#endif // STATISTIQUES_H
 

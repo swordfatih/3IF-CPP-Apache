@@ -28,24 +28,7 @@
 //{
 //} //----- Fin de Méthode
 
-//------------------------------------------------- Surcharge d'opérateurs
-Analyseur & Analyseur::operator = ( const Analyseur & unAnalyseur )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
-
-//-------------------------------------------- Constructeurs - destructeur
-Analyseur::Analyseur ( const Analyseur & unAnalyseur )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Analyseur>" << endl;
-#endif
-} //----- Fin de Analyseur (constructeur de copie)
-
-Analyseur::Analyseur ( Interpreteur* destination ) : destination(destination)
+Analyseur::Analyseur (const std::string& path) : std::ifstream(path)
 // Algorithme :
 //
 {
@@ -54,22 +37,36 @@ Analyseur::Analyseur ( Interpreteur* destination ) : destination(destination)
 #endif
 } //----- Fin de Analyseur
 
-Analyseur::~Analyseur ( )
-// Algorithme :
-//
+Analyseur & Analyseur::operator >> (Interpreteur* destination)
 {
-#ifdef MAP
-    cout << "Appel au destructeur de <Analyseur>" << endl;
-#endif
-} //----- Fin de ~Analyseur
+    if(!is_open())
+        return *this;
 
-void Analyseur::analyser(const std::string& ligne)
+    std::string ligne;
+
+    while(std::getline(*this, ligne))
+    {
+        destination->traiter(analyser(ligne));
+    }   
+
+    return *this;
+}
+
+Log Analyseur::analyser(const std::string& ligne)
 {
     Log log;
+    
+    std::string format;
 
-    // ligne.ligne.find(':');
-
-    std::stringstream stream(ligne);
+    for(int i = 0; i < ligne.size(); ++i)
+    {
+        char c = ligne.at(i);
+        if(c != '[' && c != ']' && c != '"')
+            format += c;
+    }
+    
+    format[format.find(':')] = ' ';
+    std::stringstream stream(format);
 
     std::string token;
 
@@ -79,9 +76,14 @@ void Analyseur::analyser(const std::string& ligne)
     std::getline(stream, log.date, ' ');
 
     std::getline(stream, token, ' ');
+    std::stringstream heure_stream(token);
+    std::getline(heure_stream, token, ':');
     log.heure = std::stoi(token);
 
+    std::getline(stream, log.shift, ' ');
     std::getline(stream, log.action, ' ');
+    std::getline(stream, log.url, ' ');
+    std::getline(stream, log.version, ' ');
     std::getline(stream, log.status, ' ');
 
     std::getline(stream, token, ' ');
@@ -90,7 +92,7 @@ void Analyseur::analyser(const std::string& ligne)
     std::getline(stream, log.referer, ' ');
     std::getline(stream, log.client, ' ');
 
-    destination->traiter(log);
+    return log;
 }
 
 //------------------------------------------------------------------ PRIVE
