@@ -67,6 +67,9 @@ public:
 
     void traiter(const Log& requete);
 
+    void generate_scoreboard();
+    void generate_dot();
+
 //------------------------------------------------------------------ PRIVE
 
 protected:

@@ -72,6 +72,16 @@ void Statistiques::traiter(const Log& requete)
 
 }
 
+void Statistiques::generate_scoreboard()
+{
+
+}
+
+void Statistiques::generate_dot()
+{
+    
+}
+
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
