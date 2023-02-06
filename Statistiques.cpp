@@ -104,24 +104,6 @@ void Statistiques::generate_scoreboard()
     }
 }
 
-std::string format(std::string input)
-{
-    if(input.rfind('/') != std::string::npos)
-        input = input.substr(input.rfind('/'));
-
-    std::string formatted;
-    for(int i = 0; i < input.size(); ++i)
-    {
-        char c = input[i];
-        if(c != '.' && c != '/' && c != '-' && c != ':')
-        {
-            formatted += c;
-        }
-    }
-
-    return formatted;
-}
-
 void Statistiques::generate_dot(const std::string& chemin_sortie)
 {
     std::cout << "Dot-file " << chemin_sortie << " generated" << std::endl;
@@ -135,13 +117,18 @@ void Statistiques::generate_dot(const std::string& chemin_sortie)
         std::set<std::string>::iterator it_pages;
         for(it_pages = pages.begin(); it_pages != pages.end(); ++it_pages)
         {
-            out << format(*it_pages) << " [label=\"" << format(*it_pages) << "\"];" << std::endl;
+            out << "noeud" << std::distance(pages.begin(), it_pages) << " [label=\"" << *it_pages << "\"];" << std::endl;
         }
 
         std::map<std::pair<std::string, std::string>, int>::iterator it_noeuds;
         for(it_noeuds = noeuds.begin(); it_noeuds != noeuds.end(); ++it_noeuds)
         {
-            out << format(it_noeuds->first.first) << " -> " << format(it_noeuds->first.second) << " [label=\"" << it_noeuds->second << "\"];" << std::endl;
+            out << "noeud" 
+                << std::distance(pages.begin(), pages.find(it_noeuds->first.first)) 
+                << " -> " 
+                << std::distance(pages.begin(), pages.find(it_noeuds->first.second)) 
+                << " [label=\"" << it_noeuds->second << "\"];" 
+                << std::endl;
         }
 
         out << "}" << std::endl;
