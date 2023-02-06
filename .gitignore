@@ -4,3 +4,4 @@ apache
 /.xmake
 /build
 /.vscode
+*.png
