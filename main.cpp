@@ -4,6 +4,35 @@
 #include <iostream>
 #include <string.h>
 #include <string>
+#include <fstream>
+
+struct Config
+{
+    std::string domaine = "http://intranet-if.insa-lyon.fr/";
+};
+
+Config charger_config(const std::string& chemin)
+{
+    Config config;
+
+    std::ifstream file(chemin);
+    if(file)
+    {
+        std::string ligne;
+        while(std::getline(file, ligne))
+        {
+            std::string key = ligne.substr(0, ligne.find("="));
+            std::string value = ligne.substr(ligne.find("=") + 1);
+
+            if(key == "domaine")
+            {
+                config.domaine = value;
+            }
+        }   
+    }
+
+    return config;
+}
 
 int main(int argc, char* argv[])
 {
@@ -33,20 +62,22 @@ int main(int argc, char* argv[])
             chemin_entree = argv[i];
         }    
     }
+
+    Config config = charger_config(".env");
      
     Analyseur analyseur(chemin_entree);
 
-    Statistiques statistiques(extension, heure);
+    Statistiques statistiques(config.domaine, extension, heure);
     analyseur >> &statistiques;
 
     analyseur.close();
 
     if(graphviz)
     {
-        statistiques.generate_dot(chemin_sortie);
+        statistiques.graphe(chemin_sortie);
     }
     
-    statistiques.generate_scoreboard();
+    statistiques.classement();
    
     return 0;
 }

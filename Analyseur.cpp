@@ -61,7 +61,7 @@ Log Analyseur::analyser(const std::string& ligne)
     for(unsigned int i = 0; i < ligne.size(); ++i)
     {
         char c = ligne.at(i);
-        if(c != '[' && c != ']' && c != '"')
+        if(c != '[' && c != ']' && c != '"' && !(c == ' ' && ligne.at(i - 1) == ' '))
             format += c;
     }
     
@@ -82,15 +82,27 @@ Log Analyseur::analyser(const std::string& ligne)
 
     std::getline(stream, log.shift, ' ');
     std::getline(stream, log.action, ' ');
-    std::getline(stream, log.url, ' ');
-    std::getline(stream, log.version, ' ');
-    std::getline(stream, log.status, ' ');
+
+    while(std::getline(stream, token, ' '))
+    {
+        if(token.find("HTTP") == 0)
+        {
+            log.version = token;
+            break;
+        }
+            
+        if(!log.url.empty())
+            log.url += ' ';
+
+        log.url += token;
+    }
 
     std::getline(stream, token, ' ');
-    log.size = std::stoll(token);
+    log.status = std::stoi(token);
 
+    std::getline(stream, log.size, ' ');
     std::getline(stream, log.referer, ' ');
-    std::getline(stream, log.client, ' ');
+    std::getline(stream, log.client, '\n');
 
     return log;
 }

@@ -47,7 +47,7 @@ Statistiques::Statistiques ( const Statistiques & unStatistiques )
 #endif
 } //----- Fin de Xxx (constructeur de copie)
 
-Statistiques::Statistiques (bool extension, int heure) : extension(extension), heure(heure)
+Statistiques::Statistiques (const std::string& domaine, bool extension, int heure) : domaine(domaine), extension(extension), heure(heure)
 // Algorithme :
 //
 {
@@ -68,23 +68,28 @@ Statistiques::~Statistiques ( )
 
 void Statistiques::traiter(const Log& requete)
 {
-    if(documents.count(requete.url) == 0)
-        documents[requete.url] = 1;
-    else
-        documents[requete.url]++;
+    std::string url = requete.url;
+    
+    if((extension && std::find(blacklist.begin(), blacklist.end(), requete.url.substr(requete.url.rfind('.') + 1)) != blacklist.end())
+        || (heure != -1 && heure != requete.heure))
+    {
+        return;    
+    }
 
-    std::pair<std::string, std::string> paire(requete.referer, requete.url);
+    documents[requete.url] = documents.count(requete.url) ? documents[requete.url] + 1 : 1;
 
-    if(noeuds.count(paire) == 0)
-        noeuds[paire] = 1;
-    else
-        noeuds[paire]++;
-
-    pages.insert(requete.referer);
-    pages.insert(requete.url);
+    if(requete.referer.find(domaine) == 0) // on affiche seulement les redirections locales
+    {
+        std::string&& referer = formatage(requete.referer);
+        std::pair<std::string, std::string> paire(referer, requete.url);
+        noeuds[paire] = noeuds.count(paire) ? noeuds[paire] + 1 : 1;
+ 
+        pages.insert(referer);
+        pages.insert(requete.url);
+    }
 }
 
-void Statistiques::generate_scoreboard()
+void Statistiques::classement()
 {
     std::vector<std::pair<std::string, int>> valeurs;
 
@@ -98,13 +103,13 @@ void Statistiques::generate_scoreboard()
         return f.second > s.second;
     });
 
-    for(unsigned int i = 0; i < valeurs.size(); ++i)
+    for(unsigned int i = 0; i < (valeurs.size() > 10 ? 10 : valeurs.size()); ++i)
     {
         std::cout << valeurs[i].first << " " << valeurs[i].second << std::endl;
     }
 }
 
-void Statistiques::generate_dot(const std::string& chemin_sortie)
+void Statistiques::graphe(const std::string& chemin_sortie)
 {
     std::cout << "Dot-file " << chemin_sortie << " generated" << std::endl;
 
@@ -123,10 +128,9 @@ void Statistiques::generate_dot(const std::string& chemin_sortie)
         std::map<std::pair<std::string, std::string>, int>::iterator it_noeuds;
         for(it_noeuds = noeuds.begin(); it_noeuds != noeuds.end(); ++it_noeuds)
         {
-            out << "noeud" 
-                << std::distance(pages.begin(), pages.find(it_noeuds->first.first)) 
+            out << "noeud" << std::distance(pages.begin(), pages.find(it_noeuds->first.first)) 
                 << " -> " 
-                << std::distance(pages.begin(), pages.find(it_noeuds->first.second)) 
+                << "noeud" << std::distance(pages.begin(), pages.find(it_noeuds->first.second)) 
                 << " [label=\"" << it_noeuds->second << "\"];" 
                 << std::endl;
         }
@@ -138,4 +142,33 @@ void Statistiques::generate_dot(const std::string& chemin_sortie)
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
+
+std::string Statistiques::formatage(std::string source)
+{
+    size_t protocol = source.find("//");
+    if(protocol != std::string::npos)
+    {
+        source = source.substr(protocol + 1);
+    }
+
+    size_t page = source.find("/", 1);
+    if(page != std::string::npos)
+    {
+        source = source.substr(page);
+    }   
+
+    size_t query = source.find("?");
+    if(query != std::string::npos)
+    {
+        source = source.substr(0, query);
+    }
+
+    query = source.find(";");
+    if(query != std::string::npos)
+    {
+        source = source.substr(0, query);
+    }
+
+    return source;
+}
 

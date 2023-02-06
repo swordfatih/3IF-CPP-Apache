@@ -57,7 +57,7 @@ public:
     // Contrat :
     //
 
-    Statistiques (bool extension = false, int heure = -1);
+    Statistiques (const std::string& domaine, bool extension = false, int heure = -1);
     // Mode d'emploi :
     //
     // Contrat :
@@ -71,19 +71,22 @@ public:
 
     void traiter(const Log& requete);
 
-    void generate_scoreboard();
-    void generate_dot(const std::string& chemin_sortie);
+    void classement();
+    void graphe(const std::string& chemin_sortie);
 
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
+    std::string formatage(std::string source);
 
 //----------------------------------------------------- Attributs protégés
+    const std::array<std::string, 7> blacklist{"js", "css", "png", "jpg", "jpeg", "gif", "ico"};
     std::unordered_map<std::string, int> documents;
     std::map<std::pair<std::string, std::string>, int> noeuds;
     std::set<std::string> pages;
 
+    std::string domaine;
     bool extension;
     int heure;
 

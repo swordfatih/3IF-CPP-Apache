@@ -1,19 +1,19 @@
 OBJECTS := main.o Analyseur.o Interpreteur.o Statistiques.o
 OUTPUT := apache
 CXX := g++
-CPPFLAGS := -ansi -pedantic -Wall -std=c++11
+CXXFLAGS := -ansi -pedantic -Wall -std=c++11
 
 main: $(OBJECTS)
-	$(CXX) -o $(OUTPUT) $(OBJECTS)
+	$(CXX) -o $(OUTPUT) $^
 
-debug: CPPFLAGS := $(CPPFLAGS) -DMAP
+debug: CXXFLAGS := $(CXXFLAGS) -DMAP
 debug: main
 
-test: CPPFLAGS := $(CPPFLAGS) -DTEST
+test: CXXFLAGS := $(CXXFLAGS) -DTEST
 test: main
 
-$(OBJECTS): $(@: .o = .cpp)
-	$(CXX) -c $(patsubst %.o, %.cpp, $@) $(CPPFLAGS) 
+%.o: %.c
+	$(CXX) -c $(patsubst %.o, %.cpp, $@) $(CXXFLAGS) 
 
 clean:
 	rm -rf $(OBJECTS) $(OUTPUT)
