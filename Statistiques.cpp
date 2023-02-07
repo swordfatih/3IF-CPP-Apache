@@ -13,7 +13,6 @@
 //-------------------------------------------------------- Include système
 using namespace std;
 #include <iostream>
-#include <regex>
 
 //------------------------------------------------------ Include personnel
 #include "Statistiques.h"
@@ -76,20 +75,18 @@ void Statistiques::traiter(const Log& requete)
         return;    
     }
 
-    documents[requete.url] = documents.count(requete.url) ? documents[requete.url] + 1 : 1;
+    // Incrémentation du nombre de visite du document
+    visites[requete.url] = visites.count(requete.url) ? visites[requete.url] + 1 : 1;
 
     // On affiche seulement les redirections locales
     if(requete.referer.find(domaine) == 0) 
     {
-        std::smatch result;
-        std::regex_search(requete.referer, result, std::regex(R"(//[a-z.-]*(/.*))"));
-
-        std::string&& referer = result[result.size() - 1];
+        std::string&& referer = formatage(requete.referer);
         std::pair<std::string, std::string> paire(referer, requete.url);
-        noeuds[paire] = noeuds.count(paire) ? noeuds[paire] + 1 : 1;
+        arcs[paire] = arcs.count(paire) ? arcs[paire] + 1 : 1;
  
-        pages.insert(referer);
-        pages.insert(requete.url);
+        noeuds.insert(referer);
+        noeuds.insert(requete.url);
     }
 }
 
@@ -98,12 +95,12 @@ void Statistiques::classement()
     std::vector<std::pair<std::string, int>> valeurs;
 
     std::unordered_map<std::string, int>::iterator it;
-    for(it = documents.begin(); it != documents.end(); ++it)
+    for(it = visites.begin(); it != visites.end(); ++it)
     {
         valeurs.push_back(std::make_pair(it->first, it->second));
     }
 
-    std::sort(valeurs.begin(), valeurs.end(), [&](const std::pair<std::string, int>& f, std::pair<std::string, int>& s) -> bool {
+    std::sort(valeurs.begin(), valeurs.end(), [&](const std::pair<std::string, int>& f, const std::pair<std::string, int>& s) -> bool {
         return f.second > s.second;
     });
 
@@ -119,19 +116,19 @@ void Statistiques::graphe(std::ostream& out)
     {
         out << "digraph {" << std::endl;
 
-        std::set<std::string>::iterator it_pages;
-        for(it_pages = pages.begin(); it_pages != pages.end(); ++it_pages)
-        {
-            out << "noeud" << std::distance(pages.begin(), it_pages) << " [label=\"" << *it_pages << "\"];" << std::endl;
-        }
-
-        std::map<std::pair<std::string, std::string>, int>::iterator it_noeuds;
+        std::set<std::string>::iterator it_noeuds;
         for(it_noeuds = noeuds.begin(); it_noeuds != noeuds.end(); ++it_noeuds)
         {
-            out << "noeud" << std::distance(pages.begin(), pages.find(it_noeuds->first.first)) 
+            out << "noeud" << std::distance(noeuds.begin(), it_noeuds) << " [label=\"" << *it_noeuds << "\"];" << std::endl;
+        }
+
+        std::map<std::pair<std::string, std::string>, int>::iterator it_arcs;
+        for(it_arcs = arcs.begin(); it_arcs != arcs.end(); ++it_arcs)
+        {
+            out << "noeud" << std::distance(noeuds.begin(), noeuds.find(it_arcs->first.first)) 
                 << " -> " 
-                << "noeud" << std::distance(pages.begin(), pages.find(it_noeuds->first.second)) 
-                << " [label=\"" << it_noeuds->second << "\"];" 
+                << "noeud" << std::distance(noeuds.begin(), noeuds.find(it_arcs->first.second)) 
+                << " [label=\"" << it_arcs->second << "\"];" 
                 << std::endl;
         }
 
@@ -145,6 +142,36 @@ void Statistiques::graphe(std::ostream& out)
 
 std::string Statistiques::formatage(std::string source)
 {
+    // Les performances de std::regex ralentissent le programme
+    // Il vaut mieux utiliser des find et des substr
 
+    // std::smatch result;
+    // std::regex_search(source, result, std::regex(R"(//[a-z.-]*(/.*))"));
+    // return result[result.size() - 1];
+
+    size_t protocol = source.find("//");
+    if(protocol != std::string::npos)
+    {
+        source = source.substr(protocol + 1);
+    }
+
+    size_t page = source.find("/", 1);
+    if(page != std::string::npos)
+    {
+        source = source.substr(page);
+    }   
+
+    size_t query = source.find("?");
+    if(query != std::string::npos)
+    {
+        source = source.substr(0, query);
+    }
+
+    query = source.find(";");
+    if(query != std::string::npos)
+    {
+        source = source.substr(0, query);
+    }
+
+    return source;
 }
-

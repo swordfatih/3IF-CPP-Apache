@@ -82,9 +82,10 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
     const std::array<std::string, 7> blacklist{"js", "css", "png", "jpg", "jpeg", "gif", "ico"};
-    std::unordered_map<std::string, int> documents;
-    std::map<std::pair<std::string, std::string>, int> noeuds;
-    std::set<std::string> pages;
+    
+    std::unordered_map<std::string, int> visites;
+    std::map<std::pair<std::string, std::string>, int> arcs;
+    std::set<std::string> noeuds;
 
     std::string domaine;
     bool extension;

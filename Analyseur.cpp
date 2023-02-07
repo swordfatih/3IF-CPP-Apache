@@ -55,9 +55,9 @@ Analyseur & Analyseur::operator >> (Interpreteur* destination)
 Log Analyseur::analyser(const std::string& ligne)
 {
     Log log;
-    
-    std::string format;
 
+    // On efface les caractères inutiles  
+    std::string format;
     for(unsigned int i = 0; i < ligne.size(); ++i)
     {
         char c = ligne.at(i);
@@ -66,6 +66,8 @@ Log Analyseur::analyser(const std::string& ligne)
     }
     
     format[format.find(':')] = ' ';
+
+    // On extrait les informations
     std::stringstream stream(format);
 
     std::string token;

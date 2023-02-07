@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    Config config = charger_config(".env");
+    Config config = charger_config(".conf");
      
     Analyseur analyseur(chemin_entree);
 
