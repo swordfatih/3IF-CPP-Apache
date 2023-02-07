@@ -72,7 +72,7 @@ public:
     void traiter(const Log& requete);
 
     void classement();
-    void graphe(const std::string& chemin_sortie);
+    void graphe(std::ostream& out);
 
 //------------------------------------------------------------------ PRIVE
 

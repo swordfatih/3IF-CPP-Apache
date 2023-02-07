@@ -2,7 +2,8 @@
 #include "Analyseur.h"
 #include "Statistiques.h"
 #include <iostream>
-#include <string.h>
+#include <cstring>
+#include <cstdlib>
 #include <string>
 #include <fstream>
 
@@ -43,19 +44,46 @@ int main(int argc, char* argv[])
 
     for(int i = 1; i < argc; ++i) 
     {
-        if(strcmp(argv[i], "-g") == 0)
+        if(argv[i][0] == '-')
         {
-            graphviz = true;
-            chemin_sortie = argv[++i];
-        }
-        else if(strcmp(argv[i], "-e") == 0)
-        {
-            extension = true; 
-        }
-        else if(strcmp(argv[i], "-t") == 0)
-        { 
-            std::string token(argv[++i]);
-            heure = std::stoi(token);
+            if(std::strcmp(argv[i], "-g") == 0)
+            {
+                graphviz = true;
+
+                if(i + 1 >= argc || argv[i + 1][0] == '-')
+                {   
+                    std::cerr << "[Erreur EMISSOUT] Le nom du fichier de sortie pour GraphViz est introuvable" << std::endl;
+                    return 0;
+                }
+
+                chemin_sortie = argv[++i];
+            }
+            else if(std::strcmp(argv[i], "-e") == 0)
+            {
+                extension = true; 
+            }
+            else if(std::strcmp(argv[i], "-t") == 0)
+            { 
+                if(i + 1 >= argc || argv[i + 1][0] == '-')
+                {   
+                    std::cerr << "[Erreur EMISSHOUR] L’heure de début du créneau est manquante" << std::endl;
+                    return 0;
+                }
+
+                char* result;
+                heure = std::strtol(argv[++i], &result, 10);
+
+                if(*result || heure < 0 || heure > 23)
+                {
+                    std::cout << "[Erreur EWRONGHOUR] L’heure doit etre un entier entre 0 et 23" << std::endl;
+                    return 0;
+                }
+            }
+            else
+            {
+                std::cerr << "[Erreur EUNKOPT] L’option " << argv[i] << " est inconnu" << std::endl;
+                return 0;
+            }
         }
         else 
         {
@@ -63,9 +91,20 @@ int main(int argc, char* argv[])
         }    
     }
 
+    if(chemin_entree.empty())
+    {
+        std::cerr << "[Erreur EMISSIN] Le nom du fichier est absent (usage : analog [options] nomdufichier)" << std::endl;
+        return 0;
+    }
+
     Config config = charger_config(".env");
      
     Analyseur analyseur(chemin_entree);
+
+    if(!analyseur)
+    {
+        std::cerr << "[Erreur EOPEN] Le fichier n’a pas pu etre ouvert" << std::endl;
+    }
 
     Statistiques statistiques(config.domaine, extension, heure);
     analyseur >> &statistiques;
@@ -74,7 +113,21 @@ int main(int argc, char* argv[])
 
     if(graphviz)
     {
-        statistiques.graphe(chemin_sortie);
+        std::ofstream out(chemin_sortie);
+
+        if(!out)
+        {
+            std::cerr << "[Erreur EIMPWRITE] L’ecriture dans le fichier " << chemin_sortie << " est impossible" << std::endl;
+            return 0;
+        }
+        
+        statistiques.graphe(out);
+        std::cout << "Dot-file " << chemin_sortie << " generated" << std::endl;
+    }
+
+    if(heure != -1)
+    {
+        std::cout << "Warning : only hits between " << heure << "h and " << heure + 1 << "h have been taken into account" << std::endl;
     }
     
     statistiques.classement();

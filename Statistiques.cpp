@@ -13,6 +13,7 @@
 //-------------------------------------------------------- Include système
 using namespace std;
 #include <iostream>
+#include <regex>
 
 //------------------------------------------------------ Include personnel
 #include "Statistiques.h"
@@ -68,8 +69,7 @@ Statistiques::~Statistiques ( )
 
 void Statistiques::traiter(const Log& requete)
 {
-    std::string url = requete.url;
-    
+    // Condition pour filtrer sur l'extension ou sur l'heure
     if((extension && std::find(blacklist.begin(), blacklist.end(), requete.url.substr(requete.url.rfind('.') + 1)) != blacklist.end())
         || (heure != -1 && heure != requete.heure))
     {
@@ -78,9 +78,13 @@ void Statistiques::traiter(const Log& requete)
 
     documents[requete.url] = documents.count(requete.url) ? documents[requete.url] + 1 : 1;
 
-    if(requete.referer.find(domaine) == 0) // on affiche seulement les redirections locales
+    // On affiche seulement les redirections locales
+    if(requete.referer.find(domaine) == 0) 
     {
-        std::string&& referer = formatage(requete.referer);
+        std::smatch result;
+        std::regex_search(requete.referer, result, std::regex(R"(//[a-z.-]*(/.*))"));
+
+        std::string&& referer = result[result.size() - 1];
         std::pair<std::string, std::string> paire(referer, requete.url);
         noeuds[paire] = noeuds.count(paire) ? noeuds[paire] + 1 : 1;
  
@@ -109,12 +113,8 @@ void Statistiques::classement()
     }
 }
 
-void Statistiques::graphe(const std::string& chemin_sortie)
+void Statistiques::graphe(std::ostream& out)
 {
-    std::cout << "Dot-file " << chemin_sortie << " generated" << std::endl;
-
-    std::ofstream out(chemin_sortie);
-
     if(out)
     {
         out << "digraph {" << std::endl;
@@ -145,30 +145,6 @@ void Statistiques::graphe(const std::string& chemin_sortie)
 
 std::string Statistiques::formatage(std::string source)
 {
-    size_t protocol = source.find("//");
-    if(protocol != std::string::npos)
-    {
-        source = source.substr(protocol + 1);
-    }
 
-    size_t page = source.find("/", 1);
-    if(page != std::string::npos)
-    {
-        source = source.substr(page);
-    }   
-
-    size_t query = source.find("?");
-    if(query != std::string::npos)
-    {
-        source = source.substr(0, query);
-    }
-
-    query = source.find(";");
-    if(query != std::string::npos)
-    {
-        source = source.substr(0, query);
-    }
-
-    return source;
 }
 

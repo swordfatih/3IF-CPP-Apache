@@ -1,7 +1,11 @@
 *.o
 xmake.lua
 apache
+analog
 /.xmake
 /build
 /.vscode
 *.png
+*.dot
+*.log
+*.txt

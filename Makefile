@@ -1,5 +1,5 @@
 OBJECTS := main.o Analyseur.o Interpreteur.o Statistiques.o
-OUTPUT := apache
+OUTPUT := analog
 CXX := g++
 CXXFLAGS := -ansi -pedantic -Wall -std=c++11
 
