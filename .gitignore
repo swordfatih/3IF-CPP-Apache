@@ -3,8 +3,8 @@
 /apache
 /analog
 /.xmake
-/build
-/.vscode
+/build/
+/.vscode/
 /*.png
 /*.dot
 /*.log
