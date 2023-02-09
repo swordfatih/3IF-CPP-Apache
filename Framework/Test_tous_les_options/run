@@ -1,1 +1,1 @@
-../../../analog -t 12 -g sortie.dot -e court.log
+../../analog -t 12 -g sortie.dot -e court.log

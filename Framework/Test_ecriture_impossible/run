@@ -1,3 +1,3 @@
 touch sortie.txt;
 chmod 555 sortie.txt;
-../../../analog -g sortie.txt vide.log
+../../analog -g sortie.txt vide.log
