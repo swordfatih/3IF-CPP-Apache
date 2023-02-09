@@ -9,9 +9,6 @@ main: $(OBJECTS)
 debug: CXXFLAGS := $(CXXFLAGS) -DMAP
 debug: main
 
-test: CXXFLAGS := $(CXXFLAGS) -DTEST
-test: main
-
 %.o: %.c
 	$(CXX) -c $(patsubst %.o, %.cpp, $@) $(CXXFLAGS) 
 
