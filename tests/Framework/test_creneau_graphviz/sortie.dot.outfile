@@ -1,6 +1,0 @@
-digraph {
-noeud0 [label="/page1.html"];
-noeud1 [label="/page2.html"];
-noeud0 -> noeud1 [label="1"];
-noeud1 -> noeud0 [label="1"];
-}

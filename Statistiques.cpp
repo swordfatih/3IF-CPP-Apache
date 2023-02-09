@@ -106,7 +106,7 @@ void Statistiques::classement()
 
     for(unsigned int i = 0; i < (valeurs.size() > 10 ? 10 : valeurs.size()); ++i)
     {
-        std::cout << valeurs[i].first << " " << valeurs[i].second << std::endl;
+        std::cout << valeurs[i].first << " (" << valeurs[i].second << " hits)" << std::endl;
     }
 }
 
@@ -132,7 +132,7 @@ void Statistiques::graphe(std::ostream& out)
                 << std::endl;
         }
 
-        out << "}" << std::endl;
+        out << "}";
     }
 }
 

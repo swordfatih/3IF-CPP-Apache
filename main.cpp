@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
                 if(i + 1 >= argc || argv[i + 1][0] == '-')
                 {   
                     std::cerr << "[Erreur EMISSOUT] Le nom du fichier de sortie pour GraphViz est introuvable" << std::endl;
-                    return 0;
+                    return 1;
                 }
 
                 chemin_sortie = argv[++i];
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
                 if(i + 1 >= argc || argv[i + 1][0] == '-')
                 {   
                     std::cerr << "[Erreur EMISSHOUR] L’heure de début du créneau est manquante" << std::endl;
-                    return 0;
+                    return 1;
                 }
 
                 char* result;
@@ -75,14 +75,14 @@ int main(int argc, char* argv[])
 
                 if(*result || heure < 0 || heure > 23)
                 {
-                    std::cout << "[Erreur EWRONGHOUR] L’heure doit etre un entier entre 0 et 23" << std::endl;
-                    return 0;
+                    std::cerr << "[Erreur EWRONGHOUR] L’heure doit etre un entier entre 0 et 23" << std::endl;
+                    return 1;
                 }
             }
             else
             {
                 std::cerr << "[Erreur EUNKOPT] L’option " << argv[i] << " est inconnu" << std::endl;
-                return 0;
+                return 1;
             }
         }
         else 
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
     if(chemin_entree.empty())
     {
         std::cerr << "[Erreur EMISSIN] Le nom du fichier est absent (usage : analog [options] nomdufichier)" << std::endl;
-        return 0;
+        return 1;
     }
 
     Config config = charger_config(".conf");
@@ -104,6 +104,7 @@ int main(int argc, char* argv[])
     if(!analyseur)
     {
         std::cerr << "[Erreur EOPEN] Le fichier n’a pas pu etre ouvert" << std::endl;
+        return 1;
     }
 
     Statistiques statistiques(config.domaine, extension, heure);
@@ -118,7 +119,7 @@ int main(int argc, char* argv[])
         if(!out)
         {
             std::cerr << "[Erreur EIMPWRITE] L’ecriture dans le fichier " << chemin_sortie << " est impossible" << std::endl;
-            return 0;
+            return 1;
         }
         
         statistiques.graphe(out);
