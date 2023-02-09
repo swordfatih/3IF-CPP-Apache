@@ -1,0 +1,8 @@
+digraph {
+noeud0 [label="/page1.html"];
+noeud1 [label="/page2.html"];
+noeud2 [label="/page3.html"];
+noeud0 -> noeud1 [label="1"];
+noeud1 -> noeud2 [label="1"];
+noeud2 -> noeud1 [label="1"];
+}
