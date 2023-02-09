@@ -1,9 +1,8 @@
 /*************************************************************************
-                           Interpreteur  -  description
+        Interpreteur  -  classe abstraite qui sert de parent pour toutes 
+        les classes traitant des logs Apache.
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    copyright            : (C) 2023 par Fatih et Nihal
 *************************************************************************/
 
 //---------- Réalisation de la classe <Interpreteur> (fichier Interpreteur.cpp) ------------
@@ -17,29 +16,13 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Interpreteur.h"
 
-//------------------------------------------------------------- Constantes
-
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Interpreteur::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
-
 Interpreteur::~Interpreteur ( )
-// Algorithme :
-//
+// Algorithme : Destructeur par défaut
 {
 #ifdef MAP
     cout << "Appel au destructeur de <Interpreteur>" << endl;
 #endif
 } //----- Fin de ~Interpreteur
-
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
-

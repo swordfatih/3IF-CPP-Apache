@@ -1,9 +1,7 @@
 /*************************************************************************
-                           Analyseur  -  description
+    Analyseur  -  classe permettant d'analyser un fichier de log Apache
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    copyright            : (C) 2023 par Fatih et Nihal
 *************************************************************************/
 
 //---------- Réalisation de la classe <Analyseur> (fichier Analyseur.cpp) ------------
@@ -17,19 +15,12 @@
 //------------------------------------------------------ Include personnel
 #include "Analyseur.h"
 
-//------------------------------------------------------------- Constantes
-
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Analyseur::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
 Analyseur::Analyseur (const std::string& path) : std::ifstream(path)
-// Algorithme :
+// Algorithme : Appel au constructeur par défaut de la classe parente
 //
 {
 #ifdef MAP
@@ -38,6 +29,9 @@ Analyseur::Analyseur (const std::string& path) : std::ifstream(path)
 } //----- Fin de Analyseur
 
 Analyseur & Analyseur::operator >> (Interpreteur* destination)
+// Algorithme : Appel à la fonction analyser pour chaque ligne
+// On passe le résultat à l'interpréteur donné en paramètre
+// Qui s'occupe de traiter les logs.
 {
     if(!is_open())
         return *this;
@@ -50,9 +44,11 @@ Analyseur & Analyseur::operator >> (Interpreteur* destination)
     }   
 
     return *this;
-}
+} //----- Fin de operator >>
 
 Log Analyseur::analyser(const std::string& ligne)
+// Algorithme : parser la ligne avec un stringstream
+// On n'utilise pas de regex à cause des faibles performances
 {
     Log log;
 
@@ -107,9 +103,4 @@ Log Analyseur::analyser(const std::string& ligne)
     std::getline(stream, log.client, '\n');
 
     return log;
-}
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
-
+} //----- Fin de analyser

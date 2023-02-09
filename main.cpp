@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
         std::cout << "Warning : only hits between " << heure << "h and " << heure + 1 << "h have been taken into account" << std::endl;
     }
     
-    statistiques.classement();
+    statistiques.classement(std::cout);
    
     return 0;
 }

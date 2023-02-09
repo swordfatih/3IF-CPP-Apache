@@ -1,9 +1,8 @@
 /*************************************************************************
-                           Statistiques  -  description
+    Statistiques  -  Classe traitant des logs Apache pour en faire un 
+    classement et un graphe.
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    copyright            : (C) 2023 par Fatih et Nihal
 *************************************************************************/
 
 //---------- Réalisation de la classe <Statistiques> (fichier Statistiques.cpp) ------------
@@ -17,56 +16,29 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Statistiques.h"
 
-//------------------------------------------------------------- Constantes
-
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- Méthodes publiques
-// type Xxx::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
-
-//------------------------------------------------- Surcharge d'opérateurs
-Statistiques & Statistiques::operator = ( const Statistiques & unStatistiques )
-// Algorithme :
-//
-{
-    return *this;
-} //----- Fin de operator =
-
-//-------------------------------------------- Constructeurs - destructeur
-Statistiques::Statistiques ( const Statistiques & unStatistiques )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Xxx>" << endl;
-#endif
-} //----- Fin de Xxx (constructeur de copie)
-
 Statistiques::Statistiques (const std::string& domaine, bool extension, int heure) : domaine(domaine), extension(extension), heure(heure)
-// Algorithme :
-//
+// Algorithme : Constructeur par défaut
 {
 #ifdef MAP
-    cout << "Appel au constructeur de <Xxx>" << endl;
+    cout << "Appel au constructeur de <Statistiques>" << endl;
 #endif
-} //----- Fin de Xxx
+} //----- Fin de Statistiques
 
 
 Statistiques::~Statistiques ( )
-// Algorithme :
-//
+// Algorithme : Destructeur par défaut
 {
 #ifdef MAP
-    cout << "Appel au destructeur de <Xxx>" << endl;
+    cout << "Appel au destructeur de <Statistiques>" << endl;
 #endif
-} //----- Fin de ~Xxx
+} //----- Fin de ~Statistiques
 
 void Statistiques::traiter(const Log& requete)
+// Algorithme : d'abord on effectue une vérification sur les filtres
+// Ensuite on incrémente le nombre de visite sur l'url
+// Puis on incrémente le nombre de redirection entre ces deux liens
 {
     // Condition pour filtrer sur l'extension ou sur l'heure
     if((extension && std::find(blacklist.begin(), blacklist.end(), requete.url.substr(requete.url.rfind('.') + 1)) != blacklist.end())
@@ -90,7 +62,9 @@ void Statistiques::traiter(const Log& requete)
     }
 }
 
-void Statistiques::classement()
+void Statistiques::classement(std::ostream& out)
+// Algorithme : on transfère les valeurs vers un vecteur
+// On trie le vecteur puis on l'affiche
 {
     std::vector<std::pair<std::string, int>> valeurs;
 
@@ -106,11 +80,13 @@ void Statistiques::classement()
 
     for(unsigned int i = 0; i < (valeurs.size() > 10 ? 10 : valeurs.size()); ++i)
     {
-        std::cout << valeurs[i].first << " (" << valeurs[i].second << " hits)" << std::endl;
+        out << valeurs[i].first << " (" << valeurs[i].second << " hits)" << std::endl;
     }
 }
 
 void Statistiques::graphe(std::ostream& out)
+// Algorithme : on construit un fichier au format dot
+// compatible avec GraphViz
 {
     if(out)
     {
@@ -141,32 +117,41 @@ void Statistiques::graphe(std::ostream& out)
 //----------------------------------------------------- Méthodes protégées
 
 std::string Statistiques::formatage(std::string source)
+// Algorithme : on formatte l'url avec des finds et des substr
+//
+// On aurait pu utiliser std::regex mais
+// Les performances de std::regex ralentissent le programme
+//
+// Voici le code avec regex, beaucoup plus simple mais lent sur 
+// des très grands fichiers de log (ce qui n'est pas rare) :
+//
+// std::smatch result;
+// std::regex_search(source, result, std::regex(R"(//[a-z.-]*(/.*))"));
+// return result[result.size() - 1];
+//
 {
-    // Les performances de std::regex ralentissent le programme
-    // Il vaut mieux utiliser des find et des substr
-
-    // std::smatch result;
-    // std::regex_search(source, result, std::regex(R"(//[a-z.-]*(/.*))"));
-    // return result[result.size() - 1];
-
+    // on enlève le protocol du début
     size_t protocol = source.find("//");
     if(protocol != std::string::npos)
     {
         source = source.substr(protocol + 1);
     }
 
+    // on récupère la partie relatif
     size_t page = source.find("/", 1);
     if(page != std::string::npos)
     {
         source = source.substr(page);
     }   
 
+    // on supprime les paramètres d'URL après ?
     size_t query = source.find("?");
     if(query != std::string::npos)
     {
         source = source.substr(0, query);
     }
 
+    // on supprime les paramètres d'URL après ;
     query = source.find(";");
     if(query != std::string::npos)
     {

@@ -1,9 +1,8 @@
 /*************************************************************************
-                           Interpreteur  -  description
+        Interpreteur  -  classe abstraite qui sert de parent pour toutes 
+        les classes traitant des logs Apache.
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    copyright            : (C) 2023 par Fatih et Nihal
 *************************************************************************/
 
 //---------- Interface de la classe <Interpreteur> (fichier Interpreteur.h) ----------------
@@ -13,14 +12,11 @@
 //--------------------------------------------------- Interfaces utilisées
 #include "Log.h"
 
-//------------------------------------------------------------- Constantes
-
-//------------------------------------------------------------------ Types
-
 //------------------------------------------------------------------------
 // Rôle de la classe <Interpreteur>
 //
-// Classe abstraite
+// Classe abstraite qui sert de parent pour toutes 
+// les classes traitant des logs Apache.
 //------------------------------------------------------------------------
 
 class Interpreteur
@@ -28,34 +24,16 @@ class Interpreteur
 //----------------------------------------------------------------- PUBLIC
 
 public:
-//----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-//------------------------------------------------- Surcharge d'opérateurs
-
 //-------------------------------------------- Constructeurs - destructeur
     virtual ~Interpreteur () = 0;
-    // Mode d'emploi : Destructeur abstraite
-    //
-    // Contrat :
-    //
+    // Mode d'emploi : Destructeur par défaut purement virtuelle
 
+//----------------------------------------------------- Méthodes publiques
     virtual void traiter(const Log& requete) = 0;
-
-//------------------------------------------------------------------ PRIVE
-
-protected:
-//----------------------------------------------------- Méthodes protégées
-
-//----------------------------------------------------- Attributs protégés
-
+    // Mode d'emploi : Fonction qui a pour rôle de traiter un log Apache.
+    //
+    // Contrat : Les champs de la requête sont correctement remplis.
 };
-
-//-------------------------------- Autres définitions dépendantes de <Interpreteur>
 
 #endif // INTERPRETEUR_H
 
